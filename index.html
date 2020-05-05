@@ -24,7 +24,7 @@
         </div>
       </nav>  
       <section class="section">
-          <div class="container" ng-app="" ng-init="usageName='John'" >
+          <div class="container" ng-app="myApp" ng-controller="myCtrl" >
               <h1 class="title">What are you looking for in a Cloud Service ?</h1>
               <p class="subtitle">Tell us <strong>more</strong>!</p>
               <!-- Budget Card-->
@@ -82,8 +82,8 @@
                   </header>
                   <div class="card-content" >
                       <div class="content">
-                        <div class="select"  ng-init="usageName='Cloud Server'">
-                            <select ng-model="usageName">
+                        <div class="select">
+                            <select ng-model="usageName" ng-change="change()">
                                 <option>Cloud Server</option>
                                 <option>Cloud Hosting</option>
                                 <option>Cloud Storage</option>
@@ -99,23 +99,170 @@
               <!-- Requirements Card-->
               <div class="card">
                 <header class="card-header">
-                    <p class="card-header-title" >Requirements based on {{usageName}}:</p>
+                    <p class="card-header-title"> Requirements based on {{ usageName }}:</p>
                   </header>
                   <div class="card-content">
                       <div class="content">
-                          
-  
-                      </div>
-                  </div>
-                  <footer class="card-footer">
-                      <div class="card-footer-item"><button class="button is-link">Recomend a provider</button></div>
+                         <!--Server requirements --> 
+                        <div ng-show="showServer">
+
+                                <!--RAM field-->
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">RAM</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="select" >
+                                            <select>
+                                                <option>516</option>
+                                                <option>768</option>
+                                                <option>1G</option>
+                                                <option>1.5G</option>
+                                                <option>2G</option>
+                                                <option>4G</option>
+                                                <option>8G</option>
+                                                <option>16G</option>
+                                                <option>32G</option>
+                                                <option>64G</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End RAM field-->
+                                <!--Storage field-->
+                                <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Storage</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="select" >
+                                            <select>
+                                                <option>516</option>
+                                                <option>768</option>
+                                                <option>1G</option>
+                                                <option>1.5G</option>
+                                                <option>2G</option>
+                                                <option>4G</option>
+                                                <option>8G</option>
+                                                <option>16G</option>
+                                                <option>32G</option>
+                                                <option>64G</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End Storage field-->
+                                <!--CPU field-->
+                                <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">CPU cores</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="select" >
+                                            <select>
+                                                <option>516</option>
+                                                <option>768</option>
+                                                <option>1G</option>
+                                                <option>1.5G</option>
+                                                <option>2G</option>
+                                                <option>4G</option>
+                                                <option>8G</option>
+                                                <option>16G</option>
+                                                <option>32G</option>
+                                                <option>64G</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End CPU field-->            
+                                <!--OS field-->
+                                <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">OS</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <div class="select" >
+                                            <select>
+                                                <option>Windows</option>
+                                                <option>Linux</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End OS field-->  
+                        </div>
+                        <!--End Server requirements-->
+
+                        <!--Hosting requirements-->
+                        <div ng-show="showHosting">
+
+                        </div>
+                        <!--End Hosting requirements-->
+
+                        <!--Storage requirements-->
+                        <div ng-show="showStorage">
+
+                        </div>
+                        <!--End Storage requirements-->
+
+                        <!--Messaging requirements-->
+                        <div ng-show="showMessaging">
+
+                        </div>
+                        <!--End Messaging requirements-->          
+                    </div>
+                </div>
+                <footer class="card-footer">
+                    <div class="card-footer-item"><button class="button is-link">Recomend a provider</button></div>
                       <!-- <a href="#" class="card-footer-item">Reset</a> -->
                       <!-- <a href="#" class="card-footer-item">Delete</a>  -->
-                  </footer>
-              </div>
-              <!--End Requirements Card-->
+                </footer>
             </div>
+              <!--End Requirements Card-->
+        </div>
             
         </section>
+        <script>
+            var app = angular.module('myApp', []) ;
+            app.controller('myCtrl', function($scope){
+                $scope.usageName = "Usage" ;
+                $scope.showServer = false ;
+                $scope.showHosting = false ;
+                $scope.showStorage = false ;
+                $scope.showMessaging = false ;
+                $scope.change = function(){
+                    if($scope.usageName == "Cloud Server"){
+                        $scope.showServer = true ;
+                        $scope.showHosting = false ;
+                        $scope.showStorage = false ;
+                        $scope.showMessaging = false ;
+                    }else if ($scope.usageName == "Cloud Hosting"){
+                        $scope.showServer = false ;
+                        $scope.showHosting = true ;
+                        $scope.showStorage = false ;
+                        $scope.showMessaging = false ;                        
+
+                    }else if ($scope.usageName == "Cloud Storage"){
+                        $scope.showServer = false ;
+                        $scope.showHosting = false ;
+                        $scope.showStorage = true ;
+                        $scope.showMessaging = false ;
+                    }else if ($scope.usageName == "Cloud Messaging"){
+                        $scope.showServer = false ;
+                        $scope.showHosting = false ;
+                        $scope.showStorage = false ;
+                        $scope.showMessaging = true ;
+                    }
+                }
+            });
+        </script>
     </body>
 </html>
