@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cloud Recommender</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  </head>
+  <body>
+    <nav class="navbar is-link" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="#">
+            <i class="fa fa-cloud"></i> &nbsp; Cloud Recommender
+          </a>
+      
+          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+      </nav>  
+      <section class="section">
+          <div class="container" ng-app="" ng-init="usageName='John'" >
+              <h1 class="title">What are you looking for in a Cloud Service ?</h1>
+              <p class="subtitle">Tell us <strong>more</strong>!</p>
+              <!-- Budget Card-->
+              <div class="card">
+                  <header class="card-header">
+                      <p class="card-header-title">Budget:</p>
+                    </header>
+                    <div class="card-content">
+                        <div class="content">
+                            <div class="field">
+                                <div class="control">
+                                    <input class="input" type="number" placeholder="Enter amount you are willing to spend">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="select">
+                            <select>
+                                <option>per minute</option>
+                                <option>per hour</option>
+                                <option>per month</option>
+                                <option>per year</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!--End Budget Card-->
+
+              <!-- Timeline Card-->
+              <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Timeline:</p>
+                  </header>
+                  <div class="card-content">
+                      <div class="content">
+                          <div class="field">
+                              <div class="control">
+                                  <input class="input" type="number" placeholder="Enter how long you plan to use this service">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="select">
+                          <select>
+                              <option>charged monthly</option>
+                              <option>charged yearly</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+              <!--End Timeline Card-->
+
+              <!-- Usage Card-->
+              <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Usage:</p>
+                  </header>
+                  <div class="card-content" >
+                      <div class="content">
+                        <div class="select"  ng-init="usageName='Cloud Server'">
+                            <select ng-model="usageName">
+                                <option>Cloud Server</option>
+                                <option>Cloud Hosting</option>
+                                <option>Cloud Storage</option>
+                                <option>Cloud Messaging</option>
+                            </select>
+                        </div>
+                      </div>
+
+                  </div>
+              </div>
+              <!--End Usage Card-->
+
+              <!-- Requirements Card-->
+              <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title" >Requirements based on {{usageName}}:</p>
+                  </header>
+                  <div class="card-content">
+                      <div class="content">
+                          
+  
+                      </div>
+                  </div>
+                  <footer class="card-footer">
+                      <div class="card-footer-item"><button class="button is-link">Recomend a provider</button></div>
+                      <!-- <a href="#" class="card-footer-item">Reset</a> -->
+                      <!-- <a href="#" class="card-footer-item">Delete</a>  -->
+                  </footer>
+              </div>
+              <!--End Requirements Card-->
+            </div>
+            
+        </section>
+    </body>
+</html>
