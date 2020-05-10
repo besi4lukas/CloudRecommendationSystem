@@ -12,7 +12,7 @@
   <body>
     <nav class="navbar is-link" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-          <a class="navbar-item" href="#">
+          <a class="navbar-item" href="index.html">
             <i class="fa fa-cloud"></i> &nbsp; Cloud Recommender
           </a>
         </div>
@@ -380,7 +380,7 @@
                   </header>
                   <div class="card-content">
                       <div class="content">
-                        <!-- <p ng-show="showNoResult">Sorry, could not recommend any service. Try changing your <a class="is-link" href="index.html"> requirements</a></p> -->
+                        <p ng-if="aws_process == 0 && google_process == 0 && azure_process == 0 ">Sorry, could not recommend any service. Try changing your <a class="is-link" href="index.html"> requirements</a></p>
                           <table class="table">
                             <thead>
                                 <tr>
@@ -392,11 +392,11 @@
                               </thead>
                               <tbody>
                                   <tr ng-repeat = "x in aws_provider track by $index" >
-                                    <th ng-if="$index ==0" class="is-selected">{{x}}</th>
+                                    <th ng-if="$index ==0" class="is-selected is-light">{{x}}</th>
                                     <td ng-if="$index ==0" class="is-selected">{{ aws_details[$index].name }}, {{ aws_details[$index].vCPUs }}x, {{ aws_details[$index].memory }}MB</td>
                                     <td ng-if="$index ==0" class="is-selected">${{ aws_process[$index]}}</td>
                                     <td ng-if="$index ==0" class="is-selected">On Demand</td>
-                                    <td ng-if="$index ==0"><a href="" class="button is-link is-small is-light">Go to AWS</a></td>
+                                    <td ng-if="$index ==0"><a href="https://aws.amazon.com/ec2/" class="button is-link is-small is-light">Go to AWS</a></td>
                                     <th ng-if="$index !=0">{{x}}</th>
                                     <td ng-if="$index !=0">{{ aws_details[$index].name }}, {{ aws_details[$index].vCPUs }}x, {{ aws_details[$index].memory }}MB</td>
                                     <td ng-if="$index !=0">${{ aws_process[$index]}}</td>
@@ -407,7 +407,7 @@
                                     <td ng-if="$index ==0" class="is-selected">{{ google_details[$index].name }}, {{ google_details[$index].vCPUs }}x, {{ google_details[$index].memory }}MB</td>
                                     <td ng-if="$index ==0" class="is-selected">${{ google_process[$index]}}</td>
                                     <td ng-if="$index ==0" class="is-selected">On Demand</td> 
-                                    <td ng-if="$index ==0"><a href="" class="button is-link is-small">Go to GCP</a></td>                                 
+                                    <td ng-if="$index ==0"><a href="https://cloud.google.com/compute" class="button is-link is-small is-light">Go to GCP</a></td>                                 
                                     <th ng-if="$index !=0">{{x}}</th>
                                     <td ng-if="$index !=0">{{ google_details[$index].name }}, {{ google_details[$index].vCPUs }}x, {{ google_details[$index].memory }}MB</td>
                                     <td ng-if="$index !=0">${{ google_process[$index]}}</td>
@@ -418,7 +418,7 @@
                                     <td ng-if="$index ==0" class="is-selected">{{ azure_details[$index].name }}, {{ azure_details[$index].vCPUs }}x, {{ azure_details[$index].memory }}MB</td>
                                     <td ng-if="$index ==0" class="is-selected">${{ azure_process[$index]}}</td>
                                     <td ng-if="$index ==0" class="is-selected">On Demand</td>  
-                                    <td ng-if="$index ==0"><a href="" class="button is-link is-small">Go to Azure</a></td>                                   
+                                    <td ng-if="$index ==0"><a href="https://azure.microsoft.com/en-us/services/virtual-machines/" class="button is-link is-small is-light">Go to Azure</a></td>                                   
                                     <th ng-if="$index !=0">{{x}}</th>
                                     <td ng-if="$index !=0">{{ azure_details[$index].name }}, {{ azure_details[$index].vCPUs }}x, {{ azure_details[$index].memory }}MB</td>
                                     <td ng-if="$index !=0">${{ azure_process[$index]}}</td>
