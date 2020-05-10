@@ -31,7 +31,7 @@
                         <div class="content">
                             <div class="field">
                                 <div class="control">
-                                    <input class="input" type="number" ng-model="budget" placeholder="Enter amount you are willing to spend">
+                                    <input class="input" type="number" ng-model="budget" min="1" max="10000" placeholder="Enter amount you are willing to spend">
                                 </div>
                             </div>
                             <div class="select">
@@ -56,7 +56,7 @@
                       <div class="content">
                           <div class="field">
                               <div class="control">
-                                  <input class="input" type="number" ng-model="timeline" placeholder="Enter how long you plan to use this service">
+                                  <input class="input" type="number" ng-model="timeline" min="1" max="10" placeholder="Enter how long you plan to use this service">
                               </div>
                           </div>
                           <div class="select">
@@ -380,23 +380,50 @@
                   </header>
                   <div class="card-content">
                       <div class="content">
-                        <p ng-show="showNoResult">Sorry, could not recommend any service. Try changing your <a class="is-link" href="index.html"> requirements</a></p>
+                        <!-- <p ng-show="showNoResult">Sorry, could not recommend any service. Try changing your <a class="is-link" href="index.html"> requirements</a></p> -->
                           <table class="table">
                             <thead>
                                 <tr>
                                   <th>Provider</th>
                                   <th>Details</th>
                                   <th>Price</th>
+                                  <th>Term</th>
                                 </tr>
                               </thead>
                               <tbody>
-                                  <tr ng-repeat = "x in test track by $index">
-                                    <th>{{x}} </th>
-                                    <td>{{ test_details[$index].name }}, {{ test_details[$index].vCPUs }}x, {{ test_details[$index].memory }}MB
-
-                                    </td>
-                                    <td>${{ process[$index]}}</td>
+                                  <tr ng-repeat = "x in aws_provider track by $index" >
+                                    <th ng-if="$index ==0" class="is-selected">{{x}}</th>
+                                    <td ng-if="$index ==0" class="is-selected">{{ aws_details[$index].name }}, {{ aws_details[$index].vCPUs }}x, {{ aws_details[$index].memory }}MB</td>
+                                    <td ng-if="$index ==0" class="is-selected">${{ aws_process[$index]}}</td>
+                                    <td ng-if="$index ==0" class="is-selected">On Demand</td>
+                                    <td ng-if="$index ==0"><a href="" class="button is-link is-small is-light">Go to AWS</a></td>
+                                    <th ng-if="$index !=0">{{x}}</th>
+                                    <td ng-if="$index !=0">{{ aws_details[$index].name }}, {{ aws_details[$index].vCPUs }}x, {{ aws_details[$index].memory }}MB</td>
+                                    <td ng-if="$index !=0">${{ aws_process[$index]}}</td>
+                                    <td ng-if="$index !=0">On Demand</td>
+                                  </tr >
+                                  <tr ng-repeat = "x in google_provider track by $index">
+                                    <th ng-if="$index ==0" class="is-selected">{{x}}</th>
+                                    <td ng-if="$index ==0" class="is-selected">{{ google_details[$index].name }}, {{ google_details[$index].vCPUs }}x, {{ google_details[$index].memory }}MB</td>
+                                    <td ng-if="$index ==0" class="is-selected">${{ google_process[$index]}}</td>
+                                    <td ng-if="$index ==0" class="is-selected">On Demand</td> 
+                                    <td ng-if="$index ==0"><a href="" class="button is-link is-small">Go to GCP</a></td>                                 
+                                    <th ng-if="$index !=0">{{x}}</th>
+                                    <td ng-if="$index !=0">{{ google_details[$index].name }}, {{ google_details[$index].vCPUs }}x, {{ google_details[$index].memory }}MB</td>
+                                    <td ng-if="$index !=0">${{ google_process[$index]}}</td>
+                                    <td ng-if="$index !=0">On Demand</td>
                                   </tr>
+                                  <tr ng-repeat="x in azure_provider track by $index">
+                                    <th ng-if="$index ==0" class="is-selected">{{x}}</th>
+                                    <td ng-if="$index ==0" class="is-selected">{{ azure_details[$index].name }}, {{ azure_details[$index].vCPUs }}x, {{ azure_details[$index].memory }}MB</td>
+                                    <td ng-if="$index ==0" class="is-selected">${{ azure_process[$index]}}</td>
+                                    <td ng-if="$index ==0" class="is-selected">On Demand</td>  
+                                    <td ng-if="$index ==0"><a href="" class="button is-link is-small">Go to Azure</a></td>                                   
+                                    <th ng-if="$index !=0">{{x}}</th>
+                                    <td ng-if="$index !=0">{{ azure_details[$index].name }}, {{ azure_details[$index].vCPUs }}x, {{ azure_details[$index].memory }}MB</td>
+                                    <td ng-if="$index !=0">${{ azure_process[$index]}}</td>
+                                    <td ng-if="$index !=0">On Demand</td> 
+                                  </tr>                                  
                               </tbody>
                           </table>
                         
@@ -513,9 +540,9 @@
                                         processArray.push($scope.process(data[i])) ;
                                     }
                                 }   
-                                $scope.test = services ;
-                                $scope.test_details = data_details ;
-                                $scope.process = processArray ;
+                                $scope.aws_provider = services ;
+                                $scope.aws_details = data_details ;
+                                $scope.aws_process = processArray ;
                             }else{
                                 $scope.showNoResult = true ;
                             }
@@ -523,6 +550,64 @@
                         }, function(response) { // optional
                             // failed
                     });
+                    $http({
+                        url: 'https://us-central1-cse546proj2.cloudfunctions.net/getAzureData',
+                        method: "POST",
+                        data: {'memory' : $scope.memory, 'cores': $scope.cores, 'storage':$scope.storage, 'storageType': $scope.storageType, 'os': $scope.os}
+                        }).then(function(response) {
+                            // success
+                            if(response.data != null){
+                                let data = response.data ;
+                                let processArray = [] ;
+                                let data_details = [] ;
+                                let services = [] ;
+                                for (let i = 0; i < data.length; i++){
+                                    if($scope.process(data[i]) <= $scope.userProcess()){
+                                        services.push('Microsoft Azure') ;
+                                        data_details.push(data[i]) ;
+                                        processArray.push($scope.process(data[i])) ;
+                                    }
+                                }   
+                                $scope.azure_provider = services ;
+                                $scope.azure_details = data_details ;
+                                $scope.azure_process = processArray ;
+                            }else{
+                                $scope.showNoResult = true ;
+                            }
+                            
+                        }, function(response) { // optional
+                            // failed
+                    });       
+                    $http({
+                        url: 'https://us-central1-cse546proj2.cloudfunctions.net/getGcpData',
+                        method: "POST",
+                        data: {'memory' : $scope.memory, 'cores': $scope.cores, 'storage':$scope.storage, 'storageType': $scope.storageType, 'os': $scope.os}
+                        }).then(function(response) {
+                            // success
+                            if(response.data != null){
+                                let data = response.data ;
+                                let processArray = [] ;
+                                let data_details = [] ;
+                                let services = [] ;
+                                for (let i = 0; i < data.length; i++){
+                                    if($scope.process(data[i]) <= $scope.userProcess()){
+                                        services.push('Google Cloud Platform') ;
+                                        data_details.push(data[i]) ;
+                                        processArray.push($scope.process(data[i])) ;
+                                    }
+                                }   
+                                $scope.google_provider = services ;
+                                $scope.google_details = data_details ;
+                                $scope.google_process = processArray ;
+                            }else{
+                                $scope.showNoResult = true ;
+                            }
+                            
+                        }, function(response) { // optional
+                            // failed
+                    });                   
+
+
                 }
 
                 $scope.recomend = function(){
@@ -536,11 +621,7 @@
                                     && $scope.storageType != null && $scope.os != null){
                                         $scope.showForm = false ;
                                         $scope.showResult = true ;
-                                        $scope.api() ;
-                                        
-                                        // let gcp_cost = $scope.gcp() ;
-                                        // let azure_cost = $scope.azure() ;
-
+                                            $scope.api() ;
                                     }else{
                                         $scope.serverError = true ;
                                     }
