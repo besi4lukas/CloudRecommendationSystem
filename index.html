@@ -371,45 +371,40 @@
          <br>
             <!--End Form container -->
           <div class="container" ng-show="showResult">
-            <h1 class="title">Showing recomendations based on Requirements</h1>
+            <h1 class="title">Showing recomendations</h1>
             <!-- <p class="subtitle">Tell us <strong>more</strong>!</p> -->
               <!-- Result Card-->
               <div class="card">
                 <header class="card-header">
-                    <p class="card-header-title">Recomendations:</p>
+                    <p class="card-header-title">Recomendations based on user budget and timeline:</p>
                   </header>
                   <div class="card-content">
                       <div class="content">
-                          <ul class="list">
-                              <li class="list-item" ng-repeat="x in test track by $index">
-                                  {{x}}
-                                  <li class="list-item">
-                                      more details
-                                  </li>
-                              </li>
-                          </ul>
-                          <!-- <table class="table">
+                        <p ng-show="showNoResult">Sorry, could not recommend any service. Try changing your <a class="is-link" href="index.html"> requirements</a></p>
+                          <table class="table">
                             <thead>
                                 <tr>
                                   <th>Provider</th>
-                                  <th>Summary</th>
+                                  <th>Details</th>
                                   <th>Price</th>
                                 </tr>
                               </thead>
                               <tbody>
-                                  <tr ng-repeat = "x in result">
-                                    <th>{{ x.provider }}</th>
-                                    <td>{{ x.details }}</td>
-                                    <td>{{ x.process }}</td>
+                                  <tr ng-repeat = "x in test track by $index">
+                                    <th>{{x}} </th>
+                                    <td>{{ test_details[$index].name }}, {{ test_details[$index].vCPUs }}x, {{ test_details[$index].memory }}MB
+
+                                    </td>
+                                    <td>${{ process[$index]}}</td>
                                   </tr>
                               </tbody>
-                          </table> -->
+                          </table>
                         
                       </div>
                   </div>
                   <footer class="card-footer">
                     <!-- <div class="card-footer-item"><button class="button is-link" ng-click="recomend()">Recomend a provider</button></div> -->
-                      <div class="card-footer-item"><button class="button is-link" ng-click="requirements()">Change requirements</button></div>
+                      <div class="card-footer-item"><a class="button is-link" href="index.html">Change requirements</a></div>
                       <!-- <a href="#" class="card-footer-item">Delete</a>  -->
                 </footer>
               </div>
@@ -418,9 +413,9 @@
           </div>
         </section>
         <script>
+
             var app = angular.module('myApp', []) ;
             app.controller('myCtrl', function($scope, $http){
-                // $http.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded";
                 $scope.showForm = true ;
                 $scope.showResult = false ;
                 $scope.usageName = "Usage" ;
@@ -454,6 +449,7 @@
                         $scope.showMessaging = true ;
                     }
                 }
+
                 $scope.userProcess = function(){
                     let result = 0 ;
                     if($scope.budget_period == "hour"){
@@ -497,33 +493,38 @@
                     }
                     return result ;
                 }
+
                 $scope.api = function(){
-                    // return $scope.process(data) ;
                     $http({
                         url: 'https://us-central1-cse546proj2.cloudfunctions.net/getAwsData',
                         method: "POST",
                         data: {'memory' : $scope.memory, 'cores': $scope.cores, 'storage':$scope.storage, 'storageType': $scope.storageType, 'os': $scope.os}
                         }).then(function(response) {
                             // success
-                            let data = response.data ;
-                            let processArray = [] ;
-                            let data_details = [] ;
-                            let services = [] ;
-                            for (let i = 0; i < data.length; i++){
-                                if($scope.process(data[i]) <= $scope.userProcess()){
-                                    services.push('Amazon Web Services') ;
-                                    data_details.push(data[i]) ;
-                                    processArray.push($scope.process(data[i])) ;
-                                }
+                            if(response.data != null){
+                                let data = response.data ;
+                                let processArray = [] ;
+                                let data_details = [] ;
+                                let services = [] ;
+                                for (let i = 0; i < data.length; i++){
+                                    if($scope.process(data[i]) <= $scope.userProcess()){
+                                        services.push('Amazon Web Services') ;
+                                        data_details.push(data[i]) ;
+                                        processArray.push($scope.process(data[i])) ;
+                                    }
+                                }   
+                                $scope.test = services ;
+                                $scope.test_details = data_details ;
+                                $scope.process = processArray ;
+                            }else{
+                                $scope.showNoResult = true ;
                             }
-                            $scope.test = services ;
-                            console.log({'provider': services , 'details': data_details, 'process': processArray}) ;
-                            $scope.result = {'provider': services, 'details': data_details, 'process': processArray}  ;
                             
                         }, function(response) { // optional
                             // failed
                     });
                 }
+
                 $scope.recomend = function(){
                     if($scope.budget != null && $scope.budget_period != null){
                         $scope.showBudgetError = false;
@@ -555,10 +556,6 @@
                     }else{
                         $scope.showBudgetError = true;
                     }
-                }
-                $scope.requirements = function(){
-                    $scope.showResult = false ;
-                    $scope.showForm = true ;
                 }
             });
         </script>
