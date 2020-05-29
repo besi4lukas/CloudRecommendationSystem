@@ -1,2 +1,2 @@
 # CloudRecommendationSystem
-Recommends the best cloud provider to used based on a customers requirements
+Recommends the best cloud provider to use based on a customers requirements
